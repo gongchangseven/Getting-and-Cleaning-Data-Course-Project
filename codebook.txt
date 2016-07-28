@@ -10,8 +10,7 @@ Appropriately labels the data set with descriptive variable names.
 Finally,creates a tidy data set.
 
 2.code book
-captureID:id for every capture
-activity:each activity
+activity:each activity 
 axial: 3-axial(X Y Z)
-mean: Mean value
-std: Standard deviation
+avgofmean: the average of mean value
+avgofstd: the average of standard deviation

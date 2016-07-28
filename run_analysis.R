@@ -40,6 +40,9 @@ selectedData %>%
     gather(activity_meanorstd_axial,value,-captureID) %>%
     separate(activity_meanorstd_axial,c("activity","meanorstd","axial")) %>%
     spread(meanorstd, value) %>%
+    tbl_df %>%
+    group_by(activity,axial) %>%
+    summarize(avgofmean=mean(mean),avgofstd=mean(std)) %>%
     write.table("./data/tidy.txt",row.names = FALSE)
 
 
