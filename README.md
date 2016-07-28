@@ -2,16 +2,14 @@
 Here are the data for the project:
 https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
-I create one R script called run_analysis.R that does the following:
-Merges the training and the test sets to create one data set.
-Extracts only the measurements on the mean and standard deviation for each measurement.
-Uses descriptive activity names to name the activities in the data set
-Appropriately labels the data set with descriptive variable names.
-Finally,creates a tidy data set.
+Create one R script called run_analysis.R that does the following:
+* Merges the training and the test sets to create one data set
+* Extracts only the measurements on the mean and standard deviation for each measurement
+* Uses descriptive activity names to name the activities in the data set
+* Appropriately labels the data set with descriptive variable names
+* Finally,creates a tidy data set
 
 ## File List
 * README.md
-* run_analysis.R 
- one R script that does the following:Merges the training and the test sets to create one data set;Extracts only the measurements on the mean and standard deviation for each measurement;Uses descriptive activity names to name the activities in the data set;Appropriately labels the data set with descriptive variable names.
-* codebook.txt 
- with the data to indicate all the variables and summaries calculated, along with units, and any other relevant information
+* run_analysis.R :	 one R script that does the following:Merges the training and the test sets to create one data set;Extracts only the measurements on the mean and standard deviation for each measurement;Uses descriptive activity names to name the activities in the data set;Appropriately labels the data set with descriptive variable names.
+* codebook.txt :	 with the data to indicate all the variables and summaries calculated, along with units, and any other relevant information
