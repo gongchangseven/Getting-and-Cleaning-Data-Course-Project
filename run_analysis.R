@@ -32,7 +32,6 @@ selectedData <-data[,indx]
 names(selectedData) <- features[indx,]$V2
 
 
-
 ### tidy data
 #add a new varible
 selectedData$captureID <- 1:nrow(selectedData)
