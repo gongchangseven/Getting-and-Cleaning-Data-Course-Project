@@ -1,5 +1,5 @@
 library(dplyr)
-library(tidyr)
+library(reshape2)
 
 ###download data file
 #create dir
@@ -15,34 +15,49 @@ unzip("./data/UCI HAR Dataset.zip",exdir="./data")
 
 ###load data
 features <- read.table("./data/UCI HAR Dataset/features.txt")
+activity_labels <- read.table("./data/UCI HAR Dataset/activity_labels.txt")
+
 test_data <- read.table("./data/UCI HAR Dataset/test/X_test.txt",colClasses = "numeric")
+subject_test_data <- read.table("./data/UCI HAR Dataset/test/subject_test.txt")
+y_test_data <- read.table("./data/UCI HAR Dataset/test/y_test.txt")
+
 train_dta <- read.table("./data/UCI HAR Dataset/train/X_train.txt",colClasses = "numeric")
-
-
-###Merges the training and the test sets to create one data set
-data<- bind_rows(train_dta,test_data)
+subject_train_data <- read.table("./data/UCI HAR Dataset/train/subject_train.txt")
+y_train_data <- read.table("./data/UCI HAR Dataset/train/y_train.txt")
 
 
 ###Extracts only the measurements on the mean and standard deviation for each measurement
 # get index of mean and std
 indx <-  grep("mean\\(\\)|std\\(\\)",features$V2)
+
 #select data 
-selectedData <-data[,indx]
+test_data <-test_data[,indx]
 #set name
-names(selectedData) <- features[indx,]$V2
+varnames <- features[indx,]$V2
+varnames <- gsub("-mean\\(\\)-*","Mean",varnames)
+varnames <- gsub("-std\\(\\)-*","Std",varnames)
+
+names(test_data) <- varnames
+test_data$subject <- subject_test_data$V1
+test_data$activity <-activity_labels[y_test_data$V1,2]
 
 
-### tidy data
-#add a new varible
-selectedData$captureID <- 1:nrow(selectedData)
-#gather,separate,spread,write
-selectedData %>%
-    gather(activity_meanorstd_axial,value,-captureID) %>%
-    separate(activity_meanorstd_axial,c("activity","meanorstd","axial")) %>%
-    spread(meanorstd, value) %>%
-    tbl_df %>%
-    group_by(activity,axial) %>%
-    summarize(avgofmean=mean(mean),avgofstd=mean(std)) %>%
-    write.table("./data/tidy.txt",row.names = FALSE)
+train_dta <-train_dta[,indx]
+#set name
+names(train_dta) <- varnames
+train_dta$subject <- subject_train_data$V1
+train_dta$activity <- activity_labels[y_train_data$V1,2]
 
 
+#Merges the training and the test sets to create one data set
+data<- bind_rows(train_dta,test_data)
+
+
+data <- tbl_df(data)
+#Modify the order of cols
+data <- select(data,subject,activity,tBodyAccMeanX:fBodyBodyGyroJerkMagStd)
+
+#group   summarize
+allData.melted <- melt(data, id = c("subject", "activity"))
+data.mean <- dcast(allData.melted, subject + activity ~ variable, mean)
+write.table(data.mean,"./data/tidy.txt",row.names = FALSE)
